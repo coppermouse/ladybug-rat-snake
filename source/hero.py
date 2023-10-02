@@ -53,11 +53,11 @@ class Hero( SignalListener ):
 
             points = [ tuple(p) for p in points ]
 
-            points = np.array( points ) - ( list( Camera.get_position_xy() ) + [ Camera.get_position_z() ])
-            rotate( points, (0,0,1), -Camera.get_angle() )
-            rotate( points, (1,0,0), 0.4 )
+            offset = ( list( Camera.get_position_xy() ) + [ Camera.get_position_z() ])
 
-            projected_points = projection_vertices( points, ( half_screen_size * Camera.factors ), half_screen_size )
+
+            points = np.array( points )
+            projected_points = projection_vertices( points, ( half_screen_size * Camera.factors ), half_screen_size, Camera.get_angle(), offset )
 
             for projected_point in projected_points:
                 screen.set_at( tuple( map( int, projected_point )), 'white' )

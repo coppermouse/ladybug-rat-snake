@@ -40,8 +40,13 @@ def fogify( colors, fog, factors):
     return colors + ( fog - colors ) * np.clip( factors.reshape( factors.shape[0], 1 ) * 0.025, 0, 1)
 
 
-def projection_vertices( vertices, projection_factor, projection_offset ):
+def projection_vertices( vertices, projection_factor, projection_offset, theta, offset ):
     v = vertices
+
+    v = v - offset
+    rotate( v, (0,0,1), -theta )
+    rotate( v, (1,0,0), 0.4 )
+
     return np.flip(np.rot90( np.concatenate( (np.array( [ v[:,2] / v[:,1] ]), np.array([ v[:,0] / v[:,1] ]))))) *  projection_factor  + projection_offset
 
 
