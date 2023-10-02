@@ -16,7 +16,7 @@ from projection import projection_vertices
 class Hero( SignalListener ):
 
     direction = 0
-    position = pygame.math.Vector3( 9, 10, -12.4 )
+    position = pygame.math.Vector3( 17.5, 17.5, -12.4 )
 
     def get_listen_to_signal_types() -> list[str]:
         return ( 'on event', 'on frame', 'on draw' )

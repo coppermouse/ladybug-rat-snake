@@ -4,6 +4,7 @@
 # author: coppermouse
 # ----------------------------------------
 
+import math
 import pygame
 from signal_listener import SignalListener
 from projection import projection_vertices
@@ -17,6 +18,7 @@ class InEnvironment( SignalListener ):
     in_environments = set()
 
     def __init__( self, scene_position ):
+        scene_position = np.array( scene_position ) 
         self.scene_position = scene_position
         InEnvironment.in_environments.add( self )
 
@@ -44,8 +46,9 @@ class InEnvironment( SignalListener ):
                     offset,
                 )[0]
                 point = tuple(map(int, projected_vertex ))
-                #pygame.draw.circle( screen, 'red', point, 12, 3 )
-                ie.environment_draw( point )
+                scale = (1/np.linalg.norm( ie.scene_position - Camera.get_camera_position_xyz() ))*2500
+                if scale > 160: scale = 160
+                ie.environment_draw( point, scale )
 
         elif _type == 'on setup':
             cls.monster = load_image( ':/assets/monster.png' ) # NOTE: monster thing is temp just 

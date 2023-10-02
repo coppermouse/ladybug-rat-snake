@@ -22,6 +22,10 @@ class Camera:
         return 1
 
 
+    def get_camera_position_xyz():
+        return np.array ( list( Camera.get_position_xy() ) + [ Camera.get_position_z() ])
+
+
     def get_angle():
         from hero import Hero
         return math.radians( Hero.direction ) + math.pi*0.5
