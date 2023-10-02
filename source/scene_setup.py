@@ -20,6 +20,6 @@ class SceneSetup( SignalListener ):
     @classmethod
     def on_signal( cls, _type: str, message = None ):
         if _type == 'on setup':
-            InEnvironment( (0,0,0) ) 
+            InEnvironment( (10.5,10.5,-12.4) ) 
 
 
