@@ -5,6 +5,7 @@
 # ----------------------------------------
 
 from monster import Monster
+from square import Square
 from signal_listener import SignalListener
 from in_environment import InEnvironment
 
@@ -22,5 +23,6 @@ class SceneSetup( SignalListener ):
     def on_signal( cls, _type: str, message = None ):
         if _type == 'on setup':
             Monster( (10.5,10.5,-12.4) ) 
+            Square( (16.5,14.5,-12.4) ) 
 
 

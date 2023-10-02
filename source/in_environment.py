@@ -51,3 +51,4 @@ class InEnvironment( SignalListener ):
             cls.monster = load_image( ':/assets/monster.png' ) # NOTE: monster thing is temp just 
                                                                # for testing this class
 
+            cls.square = load_image( ':/assets/square.png' ) # NOTE: temp
