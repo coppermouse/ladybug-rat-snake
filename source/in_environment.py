@@ -45,7 +45,7 @@ class InEnvironment( SignalListener ):
                 )[0]
                 point = tuple(map(int, projected_vertex ))
                 #pygame.draw.circle( screen, 'red', point, 12, 3 )
-                screen.blit( cls.monster, cls.monster.get_rect( center = point ) ) # NOTE: temp
+                ie.environment_draw( point )
 
         elif _type == 'on setup':
             cls.monster = load_image( ':/assets/monster.png' ) # NOTE: monster thing is temp just 

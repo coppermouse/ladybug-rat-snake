@@ -4,6 +4,7 @@
 # author: coppermouse
 # ----------------------------------------
 
+from monster import Monster
 from signal_listener import SignalListener
 from in_environment import InEnvironment
 
@@ -20,6 +21,6 @@ class SceneSetup( SignalListener ):
     @classmethod
     def on_signal( cls, _type: str, message = None ):
         if _type == 'on setup':
-            InEnvironment( (10.5,10.5,-12.4) ) 
+            Monster( (10.5,10.5,-12.4) ) 
 
 
