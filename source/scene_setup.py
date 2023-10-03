@@ -24,7 +24,7 @@ class SceneSetup( SignalListener ):
     @classmethod
     def on_signal( cls, _type: str, message = None ):
         if _type == 'on setup':
-            Hero()
+            Hero( (17.5,17.5,-12.4) )
             Monster( (10.5,10.5,-12.4) ) 
             Square( (17.5,17.5,-12.4) ) 
 

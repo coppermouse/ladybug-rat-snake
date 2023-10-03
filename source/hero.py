@@ -5,6 +5,7 @@
 # ----------------------------------------
 
 import pygame
+from in_environment import InEnvironment
 from camera import Camera
 from mask import Mask
 from display import Display
@@ -13,13 +14,14 @@ from rotate import rotate
 import numpy as np
 from projection import projection_vertices
 
-class Hero( SignalListener ):
+class Hero( InEnvironment, SignalListener ):
 
     hero = None
 
-    def __init__( self ):
+    def __init__( self, scene_position ):
+        InEnvironment.__init__( self, scene_position )
         self.direction = 0
-        self.position = pygame.math.Vector3( 17.5, 17.5, -12.4 )
+        self.position = pygame.math.Vector3( scene_position )
         Hero.hero = self
 
     def get_listen_to_signal_types() -> list[str]:
@@ -77,3 +79,5 @@ class Hero( SignalListener ):
         return mask, [ int(c*Mask.tile_size)-3 for c in new_pos ] 
 
 
+    def environment_draw( self, point, scale ):
+        pass
