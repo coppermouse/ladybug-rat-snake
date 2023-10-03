@@ -22,7 +22,7 @@ class Display( SignalListener ):
     def on_signal( cls, _type: str, message = None ):
         cls.screen = screen = pygame.display.set_mode(
             (1920, 1080), 
-            pygame.SCALED | pygame.NOFRAME ,
+            #pygame.SCALED | pygame.NOFRAME ,
             # vsync=True
         )
 
