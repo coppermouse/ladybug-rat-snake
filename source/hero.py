@@ -60,4 +60,9 @@ class Hero( InEnvironment, SignalListener ):
 
 
     def environment_draw( self, point, scale ):
-        pass
+        screen = Display.screen
+        cls = InEnvironment
+        s = pygame.transform.scale( cls.square, (scale,)*2 )
+        screen.blit( s, s.get_rect( center = point ) )
+
+

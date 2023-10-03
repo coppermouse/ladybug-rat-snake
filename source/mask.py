@@ -44,7 +44,7 @@ class Mask( pygame.mask.Mask, SignalListener ):
 
     @classmethod
     def on_draw(cls):
-        return
+        return # disable debug
         Display.screen.blit( cls.solid_mask.to_surface(), (0,0) )
 
 
