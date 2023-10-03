@@ -15,7 +15,7 @@ class Camera:
     def get_position_xy():
         from hero import Hero
         v = Camera.get_angle()
-        return pygame.math.Vector2( Hero.position[:2] ) + pygame.math.Vector2( 14.1, 0 ).rotate_rad( -v-math.pi*1.5 )
+        return pygame.math.Vector2( Hero.hero.position[:2] ) + pygame.math.Vector2( 14.1, 0 ).rotate_rad( -v-math.pi*1.5 )
 
 
     def get_position_z():
@@ -28,6 +28,6 @@ class Camera:
 
     def get_angle():
         from hero import Hero
-        return math.radians( Hero.direction ) + math.pi*0.5
+        return math.radians( Hero.hero.direction ) + math.pi*0.5
 
 

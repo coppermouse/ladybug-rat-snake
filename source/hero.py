@@ -15,8 +15,12 @@ from projection import projection_vertices
 
 class Hero( SignalListener ):
 
-    direction = 0
-    position = pygame.math.Vector3( 17.5, 17.5, -12.4 )
+    hero = None
+
+    def __init__( self ):
+        self.direction = 0
+        self.position = pygame.math.Vector3( 17.5, 17.5, -12.4 )
+        Hero.hero = self
 
     def get_listen_to_signal_types() -> list[str]:
         return ( 'on event', 'on frame', 'on draw' )
@@ -31,25 +35,25 @@ class Hero( SignalListener ):
         if _type == 'on event':
             event = message
             if event.type == pygame.MOUSEMOTION:
-                cls.direction += event.rel[0]
+                cls.hero.direction += event.rel[0]
 
         elif _type == 'on frame':
             for k, delta in ( (pygame.K_w,-1), (pygame.K_s,1) ):
                 if pygame.key.get_pressed()[k]:
                     v = 0.1 * delta
-                    _np = cls.position + pygame.math.Vector3( v,0,0 ).rotate( -Hero.direction , (0,0,1) )
+                    _np = cls.hero.position + pygame.math.Vector3( v,0,0 ).rotate( -Hero.hero.direction , (0,0,1) )
                     if _np[0] >= 0 and _np[1] >= 0 and _np[0] < 32 and _np[1] < 32:
                         if not Mask.solid_mask.overlap( *Hero.get_collision_mask( _np[:2] )):
-                            cls.position = _np
+                            cls.hero.position = _np
 
         elif _type == 'on draw':
             screen = Display.screen
             half_screen_size = np.array(screen.get_size()) // 2
-            points = [ pygame.math.Vector3( ( Hero.position ) ) + pygame.math.Vector3( 0.4,0,0).rotate(v+45,(0,0,1)) 
+            points = [ pygame.math.Vector3( ( Hero.hero.position ) ) + pygame.math.Vector3( 0.4,0,0).rotate(v+45,(0,0,1)) 
                 for v in range(0,360,360//4)
             ]
 
-            points.append( pygame.math.Vector3( Hero.position  ) + pygame.math.Vector3(-1,0,0).rotate( -Hero.direction, (0,0,1) )  )
+            points.append( pygame.math.Vector3( Hero.hero.position  ) + pygame.math.Vector3(-1,0,0).rotate( -Hero.hero.direction, (0,0,1) )  )
 
             points = [ tuple(p) for p in points ]
 
@@ -62,9 +66,9 @@ class Hero( SignalListener ):
             for projected_point in projected_points:
                 screen.set_at( tuple( map( int, projected_point )), 'white' )
 
-            mask, offset = cls.get_collision_mask( cls.position[:2] )
+            mask, offset = cls.get_collision_mask( cls.hero.position[:2] )
             Display.screen.blit( mask.to_surface( setcolor = 'blue' ), offset )
-            pygame.draw.rect( Display.screen, 'red', (*[ int(c*Mask.tile_size) for c in cls.position[:2]  ], 1, 1 ), 1 )
+            pygame.draw.rect( Display.screen, 'red', (*[ int(c*Mask.tile_size) for c in cls.hero.position[:2]  ], 1, 1 ), 1 )
 
 
     def get_collision_mask( new_pos ):
