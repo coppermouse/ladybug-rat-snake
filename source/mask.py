@@ -17,7 +17,7 @@ class Mask( pygame.mask.Mask, SignalListener ):
 
 
     def get_receive_signal_order( _type: str ) -> int:
-        return 80
+        return 95
 
 
     @classmethod
@@ -44,7 +44,7 @@ class Mask( pygame.mask.Mask, SignalListener ):
 
     @classmethod
     def on_draw(cls):
-        return # disable debug
+        return
         Display.screen.blit( cls.solid_mask.to_surface(), (0,0) )
 
 
