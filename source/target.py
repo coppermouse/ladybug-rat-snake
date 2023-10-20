@@ -57,10 +57,11 @@ class Target( SignalListener ):
                 cls.get_start(),
                 target_vector, 
                 Visor.visor, 
-                int( Target.get_distance_to_wall() + 1 )
             )
+            if cls.target_hit is None:
+                cls.target_hit = cls.get_start() + target_vector * Target.get_distance_to_wall()
 
-            if cls.focus_point:
+            if cls.focus_point is not None:
                 a = Mouse.get_internal_position()
                 b = project( cls.focus_point )[0]
                 f = g['mouse-to-cursor-factor']

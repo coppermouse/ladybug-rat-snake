@@ -21,6 +21,6 @@ mask_tile_size = 10
 mask_map_solid_color = ( 255, 255, 255, 40 )
 
 
-visor_factor = 4
-ray_step_size = 4
+visor_factor = 8
+ray_step_size = 24
 

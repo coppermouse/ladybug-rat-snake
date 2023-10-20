@@ -23,6 +23,6 @@ class LaserShadow( Line ):
 
     @property
     def end( self ):
-        return Target.target_hit[:2] + (0,)
+        return tuple(Target.target_hit[:2]) + (0,)
 
 
