@@ -11,8 +11,12 @@ from box_line_intersect import box_line_intersect
 def ray( origin, direction, visor ):
 
     rect = (32,32,2) # NOTE: hard code this for now
-    intersect_start, intersect_end = box_line_intersect( origin, direction, rect )
+    bli = box_line_intersect( origin, direction, rect )
     
+    if bli is None: return None
+
+    intersect_start, intersect_end = bli
+
     origin += direction * intersect_start
     distance = int(np.linalg.norm( intersect_start - intersect_end )) + 1
 

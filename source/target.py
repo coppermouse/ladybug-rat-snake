@@ -43,7 +43,7 @@ class Target( SignalListener ):
             dp = ( np.array( Target.target_hit[:2] ) ) * factor + offset
             surface.blit( aim, aim.get_rect( center = dp ) )
 
-            if Target.focus_point:
+            if Target.focus_point is not None:
                 dp = ( np.array(Target.focus_point[:2]) ) * factor + offset
                 pygame.draw.circle( surface, 'cyan', dp, 9, 1 )
 

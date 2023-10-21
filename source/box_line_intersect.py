@@ -34,7 +34,9 @@ def box_line_intersect( line_start, line_direction, box ):
 
         intersects.add( tuple(intersect) )
 
-    assert len( intersects ) == 2
+    assert len( intersects ) in (0,2)
+
+    if len( intersects ) == 0: return None
 
     intersect_distances = { - line_direction.dot( line_start - intersect ) for intersect in intersects }
 
