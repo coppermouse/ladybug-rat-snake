@@ -5,6 +5,7 @@
 
 import pygame
 from make_environment import make_environment
+from make_boxes import make_boxes
 from signal_listener import SignalListener
 from projection import projection_polygons
 from camera import Camera
@@ -33,6 +34,12 @@ class MeshEnvironment( SignalListener ):
 
             polygons, colors = make_environment( level )
             
+            # temp solution, we are trying to prototype here...
+            if level == 2:
+                boxes = make_boxes()
+                polygons += boxes[0]
+                colors += boxes[1]
+
             # --- sort the polygons based on positions, make sure colors also being sorted becuase its order correspond to polygons order
             sorter = list( zip( polygons, colors ) )
             sorter.sort( key = lambda a:a[0][0][2] + a[0][1][2] + a[0][2][2] + a[0][3][2] )
