@@ -12,7 +12,7 @@ def height_map_value_to_z( v ):
 
 def make_environment():
 
-    world = Resource.imgs[3]
+    world = Resource.imgs[4]
 
     f = size_factor = 1
     zf = 1/8
@@ -34,6 +34,10 @@ def make_environment():
                 ( [ (0,0,0),  (0,1,0),  (0,1,-1), (0,0,-1) ], [-1,0] ),
             ]:
                 dx, dy = delta if delta else (0,0)
+
+                if world.get_at( (x,y) ) == (0,255,255,255):
+                    continue
+
 
                 # only place polygon if free on the side of the cube
                 try:
