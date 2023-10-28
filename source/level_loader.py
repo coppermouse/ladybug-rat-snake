@@ -23,7 +23,13 @@ class LevelLoader( SignalListener ):
         if _type == 'on event':
             event = message
             if event.type == pygame.KEYDOWN:
+
+                # --- this is of course not a good solution if we have many levels
+                #     but since this is just a temp solution it is ok
                 if event.key == pygame.K_1:
                     SignalManager.send_signal( 'on level load', 1 )
+                elif event.key == pygame.K_2:
+                    SignalManager.send_signal( 'on level load', 2 )
+                # ---
 
 

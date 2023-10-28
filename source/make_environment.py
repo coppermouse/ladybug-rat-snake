@@ -10,9 +10,10 @@ from _resource import Resource
 def height_map_value_to_z( v ):
     return 255-v
 
-def make_environment():
+def make_environment( level ):
 
-    world = Resource.imgs[4]
+    # let us just hard code level to resource map for now... this is just temp
+    world = Resource.imgs[{1:3,2:4}[level]]
 
     f = size_factor = 1
     zf = 1/8

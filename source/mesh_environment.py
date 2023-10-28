@@ -29,8 +29,9 @@ class MeshEnvironment( SignalListener ):
     def on_signal( cls, _type: str, message = None ):
 
         if _type == 'on level load':
- 
-            polygons, colors = make_environment()
+            level = message
+
+            polygons, colors = make_environment( level )
             
             # --- sort the polygons based on positions, make sure colors also being sorted becuase its order correspond to polygons order
             sorter = list( zip( polygons, colors ) )
