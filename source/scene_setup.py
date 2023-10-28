@@ -29,9 +29,12 @@ class SceneSetup( SignalListener ):
             Monster( (17.5,17.5,1/8) ) 
             Laser()
             LaserShadow() 
-            Wall( (0,32,), (0,0) )
-            Wall( (0,0,), (32,0) )
-            Wall( (32,0,), (32,32) )
-            Wall( (32,32,), (0,32) )
+
+            wm = wall_margins = 2
+
+            Wall( ( 0-wm,  32+wm,), ( 0-wm,  0-wm  ) )
+            Wall( ( 0-wm,  0-wm, ), ( 32+wm, 0-wm  ) )
+            Wall( ( 32+wm, 0-wm, ), ( 32+wm, 32+wm ) )
+            Wall( ( 32+wm, 32+wm,), ( 0-wm,  32+wm ) )
 
 

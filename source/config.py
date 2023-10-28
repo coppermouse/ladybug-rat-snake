@@ -12,9 +12,9 @@ near = ( 4, 200 )
 
 scale_in_environment_max = 160
 
-map_margin = 20
+map_margin = 80
 map_size = 32
-map_factor = 16
+map_factor = 12
 map_color = ( 100, 200, 134, 20 )
 
 mask_tile_size = 10
