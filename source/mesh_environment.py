@@ -15,8 +15,10 @@ fog_color = [ 0x43, 0x4a, 0x55 ]
 
 class MeshEnvironment( SignalListener ):
 
+    loaded = False
+
     def get_listen_to_signal_types() -> list[str]:
-        return ( 'on draw', 'on setup' )
+        return ( 'on draw', 'on setup', 'on level load' )
 
 
     def get_receive_signal_order( _type: str ) -> int:
@@ -26,8 +28,8 @@ class MeshEnvironment( SignalListener ):
     @classmethod
     def on_signal( cls, _type: str, message = None ):
 
-        if _type == 'on setup':
-
+        if _type == 'on level load':
+ 
             polygons, colors = make_environment()
             
             # --- sort the polygons based on positions, make sure colors also being sorted becuase its order correspond to polygons order
@@ -44,8 +46,10 @@ class MeshEnvironment( SignalListener ):
             cls.polygons = polygons
             cls.colors = colors
 
+            cls.loaded = True
 
         if _type == 'on draw':
+            if not cls.loaded: return
             screen = Display.screen
             half_screen_size = Display.half_screen_size
 

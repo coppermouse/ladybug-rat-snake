@@ -10,6 +10,7 @@ signal_types = {
     'on make map',
     'on mouse motion',
     'on change open menu state',
+    'on level load',
 }
 
 
