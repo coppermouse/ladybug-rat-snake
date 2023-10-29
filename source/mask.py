@@ -14,7 +14,7 @@ from config  import mask_map_solid_color
 class Mask( pygame.mask.Mask, SignalListener ):
 
     def get_listen_to_signal_types() -> list[str]:
-        return ( 'on setup', 'on make map' )
+        return ( 'on level load', 'on make map' )
 
 
     def get_receive_signal_order( _type: str ) -> int:
@@ -24,8 +24,9 @@ class Mask( pygame.mask.Mask, SignalListener ):
     @classmethod
     def on_signal( cls, _type: str, message = None ):
         
-        if _type == 'on setup':
-            cls.on_setup()
+        if _type == 'on level load':
+            level = message
+            cls.on_level_load( level )
 
         elif _type == 'on make map':
             surface, factor, offset = message
@@ -35,8 +36,8 @@ class Mask( pygame.mask.Mask, SignalListener ):
 
 
     @classmethod
-    def on_setup(cls):
-        world = Resource.imgs[3]
+    def on_level_load( cls, level ):
+        world = Resource.imgs[{1:3,2:4}[level]]
         tile_size = mask_tile_size
         cls.solid_mask = Mask( np.array( world.get_size() ) * tile_size )
 
