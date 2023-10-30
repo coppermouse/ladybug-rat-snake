@@ -5,8 +5,8 @@
 import pygame
 
 display_mode_flags = pygame.SCALED | pygame.NOFRAME
-vsync = True
-fps = 60
+vsync = False
+fps = 600
 
 near = ( 4, 200 )
 

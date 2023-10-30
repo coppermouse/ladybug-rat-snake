@@ -30,6 +30,8 @@ class LevelLoader( SignalListener ):
                     SignalManager.send_signal( 'on level load', 1 )
                 elif event.key == pygame.K_2:
                     SignalManager.send_signal( 'on level load', 2 )
+                elif event.key == pygame.K_3:
+                    SignalManager.send_signal( 'on level load', 3 )
                 # ---
 
 

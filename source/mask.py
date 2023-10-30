@@ -10,6 +10,7 @@ from _resource import Resource
 from config import mask_tile_size
 from common import range2d
 from config  import mask_map_solid_color
+from boxes import Boxes
 
 class Mask( pygame.mask.Mask, SignalListener ):
 
@@ -37,7 +38,7 @@ class Mask( pygame.mask.Mask, SignalListener ):
 
     @classmethod
     def on_level_load( cls, level ):
-        world = Resource.imgs[{1:3,2:4}[level]]
+        world = Resource.imgs[{1:3,2:4,3:6}[level]]
         tile_size = mask_tile_size
         cls.solid_mask = Mask( np.array( world.get_size() ) * tile_size )
 
@@ -46,5 +47,10 @@ class Mask( pygame.mask.Mask, SignalListener ):
             a = world.get_at( xy ).a
             if a < 250:
                 cls.solid_mask.draw( tile, np.array( xy ) * tile_size )
+
+        if Boxes.array:
+            for e,c in np.ndenumerate(Boxes.array):
+                if c > 0:
+                    cls.solid_mask.draw( tile, np.array( e ) * tile_size )
 
 

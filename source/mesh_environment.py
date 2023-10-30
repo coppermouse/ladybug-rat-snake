@@ -10,6 +10,7 @@ from signal_listener import SignalListener
 from projection import projection_polygons
 from camera import Camera
 from display import Display
+from make_house import make_house
 import numpy as np
 
 fog_color = [ 0x43, 0x4a, 0x55 ]
@@ -40,12 +41,15 @@ class MeshEnvironment( SignalListener ):
                 polygons += boxes[0]
                 colors += boxes[1]
 
+               
+
             # --- sort the polygons based on positions, make sure colors also being sorted becuase its order correspond to polygons order
             sorter = list( zip( polygons, colors ) )
             sorter.sort( key = lambda a:a[0][0][2] + a[0][1][2] + a[0][2][2] + a[0][3][2] )
             polygons = [ c[0] for c in sorter ]
             colors = [ c[1] for c in sorter ]
             # ---
+
 
             # numpyify the environment
             polygons = np.array( polygons )

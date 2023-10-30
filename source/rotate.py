@@ -31,7 +31,7 @@ def rotation_matrix_by_axis_and_theta( axis, theta ):
     return rotation_matrix
 
 
-def rotate( vertices, axis, theta ):
+def rotate( vertices, axis, theta, point = (0,0,0) ):
     # rotates (in place, no copy) a set of verticies
 
     # ( n, 3 ) float64
@@ -60,6 +60,6 @@ def rotate( vertices, axis, theta ):
                             [2 * (bd + ac), 2 * (cd - ab), aa + dd - bb - cc]])
     # ---
 
-    vertices[:] = vertices[:].dot( rotation_matrix )
-
+    vertices[:] = ( vertices[:] - point ) .dot( rotation_matrix ) + point
+    return vertices
 
