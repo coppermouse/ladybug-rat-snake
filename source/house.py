@@ -176,7 +176,7 @@ class House( SignalListener ):
             wall_colors = [None]*4
 
             
-            floors = [[(12,12,z*15*h),(20,12,z*15*h),(20,20,z*15*h),(12,20,z*15*h)] for z in [0,1,2,3,4,5,6.125]]
+            floors = [[(12,12,z*15*h),(20,12,z*15*h),(20,20,z*15*h),(12,20,z*15*h)] for z in [0,1,2,3,4,5,6.120]]
             floors_colors = [ floor_color]*len(floors)
 
 
@@ -192,7 +192,6 @@ class House( SignalListener ):
             polygons = np.concatenate( [ polygons ] + [ wall_polygons[i] for i in range(4)] )
 
 
-            print(wall_colors) 
             floors_colors = [ tuple(pygame.Color(c))[:3] for c in floors_colors ]
             for i in range(4):
                 wall_colors[i] = [ tuple(pygame.Color(c))[:3] for c in wall_colors[i] ]

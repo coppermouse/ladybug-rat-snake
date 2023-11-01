@@ -35,12 +35,12 @@ class Camera( SignalListener ):
             if cls.type == 0:
                 cls.top_view_angle += Mouse.get_normalized_internal_position()[0] * g['camera-turn-speed']
             else:
-                cls.top_view_angle += 0.005
+                cls.top_view_angle -= 0.007
 
 
         if _type == 'on level load':
             if message == 3:
-                Camera.height = 20
+                Camera.height = 18
                 Camera.look_down = 0.5
                 Camera.type = 1
 
@@ -54,7 +54,7 @@ class Camera( SignalListener ):
 
         if cls.type == 1:
             f,v = 30, -cls.top_view_angle + math.pi*0.5
-            return np.array([16,16,18]) + ( math.cos(v)*f, math.sin(v)*f, 0 )
+            return np.array([16,16,cls.height]) + ( math.cos(v)*f, math.sin(v)*f, 0 )
 
         else:
             from hero import Hero
