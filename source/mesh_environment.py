@@ -32,7 +32,7 @@ class MeshEnvironment( SignalListener ):
 
         if _type == 'on level load':
             level = message
-
+            cls.level = message
             polygons, colors = make_environment( level )
             
             # temp solution, we are trying to prototype here...
@@ -75,6 +75,8 @@ class MeshEnvironment( SignalListener ):
                 near = ( 4, 200 ),
                 edges = [ 1 / c for c in Camera.factors ],
                 fog_color = fog_color,
+                fog_offset = (0,-34,0) if cls.level == 3 else (0,0,0),
+                fog_factor = 0.03 if cls.level == 3 else 0.015,
             )
 
             screen.fill( fog_color )

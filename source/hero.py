@@ -37,7 +37,7 @@ class Hero( InEnvironment, SignalListener ):
             for k, delta, right in (
                 (pygame.K_w,-1,1), (pygame.K_s,1,1), (pygame.K_a,1,0), (pygame.K_d,-1,0) ):
                 if pygame.key.get_pressed()[k]:
-                    ca = Camera.get_top_view_angle()
+                    ca = Camera.top_view_angle
 
                     f,v = delta * 0.1, -ca + ( math.pi*0.5 * right )
                     _np = cls.hero.scene_position[:2] + ( math.cos(v)*f, math.sin(v)*f )

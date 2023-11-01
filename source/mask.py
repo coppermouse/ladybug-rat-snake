@@ -48,7 +48,7 @@ class Mask( pygame.mask.Mask, SignalListener ):
             if a < 250:
                 cls.solid_mask.draw( tile, np.array( xy ) * tile_size )
 
-        if Boxes.array:
+        if Boxes.array is not None:
             for e,c in np.ndenumerate(Boxes.array):
                 if c > 0:
                     cls.solid_mask.draw( tile, np.array( e ) * tile_size )

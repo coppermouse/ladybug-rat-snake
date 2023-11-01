@@ -19,9 +19,10 @@ class Target( SignalListener ):
 
     target_hit = None
     focus_point = None
+    enable = False
 
     def get_listen_to_signal_types() -> list[str]:
-        return ( 'on make map', 'on draw', 'on frame', 'on mouse motion' )
+        return ( 'on make map', 'on draw', 'on frame', 'on mouse motion', 'on level load' )
 
 
     def get_receive_signal_order( _type: str ) -> int:
@@ -33,6 +34,7 @@ class Target( SignalListener ):
         from visor import Visor
 
         if _type == 'on make map':
+            if not cls.enable: return
             surface, factor, offset = message
 
             p = Target.get_wall_hit()
@@ -48,10 +50,12 @@ class Target( SignalListener ):
                 pygame.draw.circle( surface, 'cyan', dp, 9, 1 )
 
         elif _type == 'on draw':
+            if not cls.enable: return
             aim = Resource.imgs[0]
             Display.screen.blit( aim, aim.get_rect( center = Mouse.get_internal_position() ) )
 
         elif _type == 'on frame':
+            if not cls.enable: return
             target_vector = Target.get_real_vector()
             cls.target_hit = ray(
                 cls.get_start(),
@@ -68,8 +72,12 @@ class Target( SignalListener ):
                 Mouse.set_actual_position( lerp2d( a, b, f ) )
 
         elif _type == 'on mouse motion':
+            if not cls.enable: return
             cls.focus_point = cls.target_hit
 
+        elif _type == 'on level load':
+            if message in (1,2):
+                cls.enable = True
 
     def get_vector():
         from camera import Camera

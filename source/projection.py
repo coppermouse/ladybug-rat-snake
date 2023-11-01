@@ -22,7 +22,7 @@ def projection_vertices( vertices, offset, rotation_matrix, projection_factor, p
 
 
 def projection_polygons( polygons, colors, offset, rotation_matrix, 
-                         projection_factor, projection_offset, edges, near, fog_color ):
+                         projection_factor, projection_offset, edges, near, fog_color, fog_offset = (0,0,0), fog_factor = 0.015  ):
 
     rm = rotation_matrix
     look_vector = np.array([0,1,0]).dot( np.linalg.inv(rm) )
@@ -38,8 +38,9 @@ def projection_polygons( polygons, colors, offset, rotation_matrix,
     # ---
 
     # --- fog
-    fog = np.array( fog_color )
-    colors = _fogify( colors, fog, np.linalg.norm( -near_and_adjusted_polygons[:,0], axis = 1 ) )
+    if fog_color:
+        fog = np.array( fog_color )
+        colors = _fogify( colors, fog, np.linalg.norm( -near_and_adjusted_polygons[:,0,:2] + fog_offset[:2], axis = 1 ), fog_factor )
     # ---
 
     # --- project 3d to 2d
@@ -99,12 +100,12 @@ def _filter_polygons_based_on_near( polygons, offset, colors, look_vector, near 
     return polygons[ mask ], colors[ mask ]
 
 
-def _fogify( colors, fog, factors ):
+def _fogify( colors, fog, factors, factor ):
     assert colors.shape[0] == factors.shape[0]
     assert colors.shape[1] == 3
     assert len( colors.shape ) == 2
     assert fog.shape == (3,)
     assert len( factors.shape ) == 1
-    return colors + ( fog - colors ) * np.clip( factors.reshape( factors.shape[0], 1 ) * 0.015, 0, 1 )
+    return colors + ( fog - colors ) * np.clip( factors.reshape( factors.shape[0], 1 ) * factor, 0, 1 )
 
 

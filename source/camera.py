@@ -18,6 +18,7 @@ class Camera( SignalListener ):
     cached_rm_angle = None
     top_view_angle = 0
     height = 13.5
+    type = 0
 
     def get_listen_to_signal_types() -> list[str]:
         return ( 'on frame', 'on level load')
@@ -30,27 +31,41 @@ class Camera( SignalListener ):
     @classmethod
     def on_signal( cls, _type: str, message = None ):
         if _type == 'on frame':
-            cls.top_view_angle += Mouse.get_normalized_internal_position()[0] * g['camera-turn-speed']
+            
+            if cls.type == 0:
+                cls.top_view_angle += Mouse.get_normalized_internal_position()[0] * g['camera-turn-speed']
+            else:
+                cls.top_view_angle += 0.005
+
+
         if _type == 'on level load':
             if message == 3:
                 Camera.height = 20
+                Camera.look_down = 0.5
+                Camera.type = 1
 
     def get_fov():
         return [ math.degrees( math.atan(1/c) ) * 2 for c in Camera.factors ]
 
 
-    def get_scene_position():
-        from hero import Hero
-        c = Camera.get_top_view_angle()
-        f, z = 20.1, Camera.height
-        v = - c - math.pi * 1.5
-        xy = Hero.hero.scene_position[:2] + ( math.cos(v)*f, math.sin(v)*f )
-        return np.array([ *xy, z ])
-
-
     @classmethod
-    def get_top_view_angle( cls ):
-        return cls.top_view_angle
+    def get_scene_position( cls ):
+
+
+        if cls.type == 1:
+            f,v = 30, -cls.top_view_angle + math.pi*0.5
+            return np.array([16,16,18]) + ( math.cos(v)*f, math.sin(v)*f, 0 )
+
+        else:
+            from hero import Hero
+
+            if not Hero.hero: return np.array((.0,.0,.0))
+
+            c = Camera.top_view_angle
+            f, z = 20.1, Camera.height
+            v = - c - math.pi * 1.5
+            xy = Hero.hero.scene_position[:2] + ( math.cos(v)*f, math.sin(v)*f )
+            return np.array([ *xy, z ])
 
 
     @classmethod

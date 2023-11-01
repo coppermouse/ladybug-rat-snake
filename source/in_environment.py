@@ -47,6 +47,9 @@ class InEnvironment( SignalListener ):
                   sp for ie in sie for sp in ( ie.scene_positions 
                   if ie.many_scene_positions else [ie.scene_position] ) ]
 
+            if not flatten_sorted_in_environment_scene_positions:
+                return
+
             nsie = np.concatenate( flatten_sorted_in_environment_scene_positions )
 
             projected_vertices, mask, scale = projection_vertices(

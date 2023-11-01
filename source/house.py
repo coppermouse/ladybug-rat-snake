@@ -12,6 +12,12 @@ from _resource import Resource
 fog_color = [ 0x43, 0x4a, 0x55 ]
 
 
+wall_color = '#252528' 
+frame_color = '#131316'
+floor_color = '#1e1e1e' 
+inner_wall_color = tuple(pygame.Color('#161616'))[:3]
+
+
 def make_wall(side):
             tile = Resource.imgs[7]
 
@@ -30,7 +36,7 @@ def make_wall(side):
                             wall = np.array(wall, dtype = np.float64)
                             wall += (12+x,12,0+1/8)
                             walls.append(wall)
-                            colors.append([0x08,0x08,0x06])
+                            colors.append(frame_color)
 
 
 
@@ -42,7 +48,7 @@ def make_wall(side):
                         wall = np.array(wall, dtype = np.float64)
                         wall += (12+x,12,ly*h+1/8)
                         walls.append(wall)
-                        colors.append([0x2a,0x2a,0x28])
+                        colors.append(wall_color)
 
                         if y != 99-7:
                             wall = [(0,0,0),(1,0,0),(1,0,0.1),(0,0,0.1)][::1]
@@ -50,7 +56,7 @@ def make_wall(side):
                             wall = np.array(wall, dtype = np.float64)
                             wall += (12+x,12,y*h+1/8)
                             walls.append(wall)
-                            colors.append([0x08,0x08,0x06])
+                            colors.append(frame_color)
 
 
 
@@ -65,7 +71,7 @@ def make_wall(side):
                             wall = np.array(wall, dtype = np.float64)
                             wall += (12+x,12,l*h+1/8)
                             walls.append(wall)
-                            colors.append([0x08,0x08,0x06])
+                            colors.append(frame_color)
 
                         if tile.get_at((x+1,l)).r != 255: 
                             wall = [(0,0,0),(.1,0,0),(.1,0,ll),(0,0,ll)][::-1]
@@ -73,7 +79,7 @@ def make_wall(side):
                             wall = np.array(wall, dtype = np.float64)
                             wall += (12+x,12,l*h+1/8)
                             walls.append(wall)
-                            colors.append([0x08,0x08,0x06])
+                            colors.append(frame_color)
 
 
 
@@ -87,8 +93,10 @@ def make_wall(side):
 
 class House( SignalListener ):
 
+    loaded = False
+
     def get_listen_to_signal_types() -> list[str]:
-        return ( 'on draw', 'on setup' )
+        return ( 'on draw', 'on level load' )
 
 
     def get_receive_signal_order( _type: str ) -> int:
@@ -99,6 +107,8 @@ class House( SignalListener ):
     def on_signal( cls, _type: str, message = None ):
 
         if _type == 'on draw':
+
+            if not cls.loaded: return
 
             screen = Display.screen
             half_screen_size = Display.half_screen_size
@@ -130,22 +140,23 @@ class House( SignalListener ):
                 half_screen_size, 
                 near = ( 4, 200 ),
                 edges = [ 1 / c for c in Camera.factors ],
-                fog_color = fog_color,
+                fog_color = None,
             )
 
             for polygon, color in zip( projected_polygons, filtered_colors ):
                 pygame.draw.polygon( screen, color, polygon )
 
 
-        elif _type == 'on setup':
-
+        elif _type == 'on level load':
+            if message != 3: return
+            cls.loaded = True
             h = 1/7
             cx, cy = corner = 12,12
             width, height = 8, 12
             rw = row_width = 1
 
             polygons = [ [(cx,cy,0),(cx+width,cy,0),(cx+width,cy,height),(cx,cy,height)][::-1]  ]
-            colors = [ (10,10,10) ] * 4
+            colors = [ inner_wall_color ] * 4
 
             #polygons, colors = make_house()
             polygons = np.array( polygons, dtype=np.float64 )
@@ -166,7 +177,7 @@ class House( SignalListener ):
 
             
             floors = [[(12,12,z*15*h),(20,12,z*15*h),(20,20,z*15*h),(12,20,z*15*h)] for z in [0,1,2,3,4,5,6.125]]
-            floors_colors = [ (30,30,30)]*len(floors)
+            floors_colors = [ floor_color]*len(floors)
 
 
             floors = np.array( floors )
@@ -181,6 +192,11 @@ class House( SignalListener ):
             polygons = np.concatenate( [ polygons ] + [ wall_polygons[i] for i in range(4)] )
 
 
+            print(wall_colors) 
+            floors_colors = [ tuple(pygame.Color(c))[:3] for c in floors_colors ]
+            for i in range(4):
+                wall_colors[i] = [ tuple(pygame.Color(c))[:3] for c in wall_colors[i] ]
+
             cls.set = dict()
             for k in j():
 
@@ -192,9 +208,6 @@ class House( SignalListener ):
 
                 )
 
-            colors = np.array( colors )
-            cls.polygons = polygons
-            cls.colors = colors
 
 
 
