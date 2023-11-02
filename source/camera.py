@@ -3,6 +3,7 @@
 # class: Camera
 # ----------------------------------------
 
+import pygame
 import math
 import numpy as np
 from signal_listener import SignalListener
@@ -35,7 +36,10 @@ class Camera( SignalListener ):
             if cls.type == 0:
                 cls.top_view_angle += Mouse.get_normalized_internal_position()[0] * g['camera-turn-speed']
             else:
-                cls.top_view_angle -= 0.007
+                if pygame.key.get_pressed()[pygame.K_a]:
+                    cls.top_view_angle += 0.016
+                if pygame.key.get_pressed()[pygame.K_d]:
+                    cls.top_view_angle -= 0.016
 
 
         if _type == 'on level load':

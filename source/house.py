@@ -96,18 +96,40 @@ class House( SignalListener ):
     loaded = False
 
     def get_listen_to_signal_types() -> list[str]:
-        return ( 'on draw', 'on level load' )
+        return ( 'on level load', )
 
 
     def get_receive_signal_order( _type: str ) -> int:
-        return 106
+        return 1060
 
 
     @classmethod
-    def on_signal( cls, _type: str, message = None ):
+    def draw_floor(cls,index):
+            if not cls.loaded: return
 
-        if _type == 'on draw':
+            screen = Display.screen
+            half_screen_size = Display.half_screen_size
 
+
+            projected_polygons, filtered_colors = projection_polygons( 
+                #*cls.set[outer_wall_visible], 
+                *cls.floors[index],
+                Camera.get_scene_position(), 
+                Camera.get_rotation_matrix(),
+                half_screen_size * Camera.factors, 
+                half_screen_size, 
+                near = ( 4, 200 ),
+                edges = [ 1 / c for c in Camera.factors ],
+                fog_color = None,
+            )
+
+            for polygon, color in zip( projected_polygons, filtered_colors ):
+                pygame.draw.polygon( screen, color, polygon )
+
+
+
+    @classmethod
+    def draw(cls):
             if not cls.loaded: return
 
             screen = Display.screen
@@ -133,7 +155,8 @@ class House( SignalListener ):
             a, b = cls.set[outer_wall_visible]
 
             projected_polygons, filtered_colors = projection_polygons( 
-                *cls.set[outer_wall_visible], 
+                #*cls.set[outer_wall_visible], 
+                *cls.outer,
                 Camera.get_scene_position(), 
                 Camera.get_rotation_matrix(),
                 half_screen_size * Camera.factors, 
@@ -146,6 +169,14 @@ class House( SignalListener ):
             for polygon, color in zip( projected_polygons, filtered_colors ):
                 pygame.draw.polygon( screen, color, polygon )
 
+
+
+
+    @classmethod
+    def on_signal( cls, _type: str, message = None ):
+
+        if _type == 'on draw':
+            pass
 
         elif _type == 'on level load':
             if message != 3: return
@@ -201,9 +232,28 @@ class House( SignalListener ):
 
                 assert len(inner_wall_polygons) == len(inner_wall_colors), (len(inner_wall_polygons), len(inner_wall_colors))
 
+
+                cls.outer = (
+                    np.concatenate( [ inner_wall_polygons ] + [ ] + [ ] ),
+                    np.concatenate( [ inner_wall_colors ] + [] ),
+
+                )
+ 
+                cls.floors = dict()
+
+                for i in range(7):
+                    cls.floors[i] = (
+                    np.concatenate( [ [floors[i]] ] ),
+                    np.concatenate( [ [floors_colors[i]] ] ),
+
+                )
+
+
                 cls.set[k] = (
-                    np.concatenate( [ inner_wall_polygons ] + [floors ] + [ wall_polygons[i] for i in k ] ),
-                    np.concatenate( [ inner_wall_colors ] + [floors_colors]+[ wall_colors[i] for i in k ] ),
+                    #np.concatenate( [ inner_wall_polygons ] + [floors ] + [ wall_polygons[i] for i in k ] ),
+                    #np.concatenate( [ inner_wall_colors ] + [floors_colors]+[ wall_colors[i] for i in k ] ),
+                    np.concatenate( [ inner_wall_polygons ] + [ ] + [ ] ),
+                    np.concatenate( [ inner_wall_colors ] + [] ),
 
                 )
 

@@ -34,6 +34,7 @@ class Hero( InEnvironment, SignalListener ):
     def on_signal( cls, _type: str, message = None ):
 
         if _type == 'on frame':
+            if not cls.hero: return
             for k, delta, right in (
                 (pygame.K_w,-1,1), (pygame.K_s,1,1), (pygame.K_a,1,0), (pygame.K_d,-1,0) ):
                 if pygame.key.get_pressed()[k]:

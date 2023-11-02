@@ -41,7 +41,12 @@ class InEnvironment( SignalListener ):
     @classmethod
     def on_signal( cls, _type: str, message = None ):
         if _type == 'on draw':
-            sie = sorted_in_environments = sorted( cls.in_environments, key = lambda ie: ie.draw_order )
+            #cls.draw()
+            pass
+
+    @classmethod
+    def draw(cls, draw_order_filter = range(-15,16)):
+            sie = sorted_in_environments = sorted( [ c for c in cls.in_environments if c.draw_order in draw_order_filter], key = lambda ie: ie.draw_order )
 
             flatten_sorted_in_environment_scene_positions = [ 
                   sp for ie in sie for sp in ( ie.scene_positions 

@@ -18,6 +18,7 @@ from functools import lru_cache
 class Monster2( InEnvironment, SignalListener ):
 
     monsters = set()
+    draw_order = -1
 
     def __init__(self, walk_node ):
         self.walk_node = walk_node
@@ -55,6 +56,12 @@ class Monster2( InEnvironment, SignalListener ):
                         m.walk_node = adj_wn
                         adj_wn.hold = m
                         m.walk_cool_down = cool_down
+
+                        x,y,z = m.walk_node.int_position
+                        if x in range(12,20) and y in range(12,20):
+                            m.draw_order = z
+                        #if z > 0: m.draw_order = 5
+
                         break
                 else:
                     pass
