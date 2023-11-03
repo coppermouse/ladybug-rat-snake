@@ -57,7 +57,7 @@ class SceneSetup( SignalListener ):
 
                 for z in range(1,7):
                     rz = z
-                    if rz == 6: rz += 0.12
+                    if rz == 6: rz += 0.1
                     for xy in range2d( (12,20),(12,20) ):
                         x,y = xy
                         WalkNode( (x,y,z), (x+.5,y+.5,1/8+(1/7)*15*rz) ) 

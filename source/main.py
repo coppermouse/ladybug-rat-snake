@@ -33,7 +33,7 @@ async def main():
         SignalManager.send_signal( 'on frame', time_delta )
         SignalManager.send_signal( 'on draw' )
         
-        pygame.display.flip()
+        pygame.display.update()
         await asyncio.sleep(0)
         
     pygame.quit()

@@ -27,3 +27,6 @@ class WalkNode( InEnvironment ):
         pygame.draw.circle( screen, self.color if self.color else 'white', point, 6, 1 )
 
 
+    def __str__( self ):
+        return str(self.int_position)
+

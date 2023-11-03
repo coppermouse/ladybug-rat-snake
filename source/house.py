@@ -35,8 +35,8 @@ def make_wall(side):
                             wall = [ (x,z,y) for x,y,z in wall ]
                             wall = np.array(wall, dtype = np.float64)
                             wall += (12+x,12,0+1/8)
-                            walls.append(wall)
-                            colors.append(frame_color)
+                            #walls.append(wall)
+                            #colors.append(frame_color)
 
 
 
@@ -94,6 +94,7 @@ def make_wall(side):
 class House( SignalListener ):
 
     loaded = False
+    cache_outer = None
 
     def get_listen_to_signal_types() -> list[str]:
         return ( 'on level load', )
@@ -150,9 +151,8 @@ class House( SignalListener ):
                 )
                 if len(r[0]) == 0: outer_wall_visible.add(e)
 
-            outer_wall_visible = frozenset(outer_wall_visible)
 
-            a, b = cls.set[outer_wall_visible]
+            outer_wall_visible = frozenset(outer_wall_visible)
 
             projected_polygons, filtered_colors = projection_polygons( 
                 #*cls.set[outer_wall_visible], 
@@ -169,6 +169,44 @@ class House( SignalListener ):
             for polygon, color in zip( projected_polygons, filtered_colors ):
                 pygame.draw.polygon( screen, color, polygon )
 
+            return outer_wall_visible
+
+    @classmethod
+    def draw_outer(cls, outer_wall_visible):
+            if not cls.loaded: return
+
+            if cls.cache_outer:
+                Display.screen.blit( cls.cache_outer, (1920//2 - 155 ,94))
+                return 
+
+
+
+            screen = pygame.Surface( (310,608), pygame.SRCALPHA*1 )
+            half_screen_size = Display.half_screen_size
+
+            
+
+
+            a, b = cls.set[outer_wall_visible]
+            projected_polygons, filtered_colors = projection_polygons( 
+                #*cls.set[outer_wall_visible], 
+                a,b,
+                Camera.get_scene_position(), 
+                Camera.get_rotation_matrix(),
+                half_screen_size * Camera.factors, 
+                (155,448), 
+                near = ( 4, 200 ),
+                edges = [ 1 / c for c in Camera.factors ],
+                fog_color = None,
+            )
+
+            
+
+            for polygon, color in zip( projected_polygons, filtered_colors ):
+                pygame.draw.polygon( screen, color, polygon )
+
+            cls.cache_outer = screen
+            Display.screen.blit( cls.cache_outer, (1920//2 - 155 ,94))
 
 
 
@@ -207,7 +245,7 @@ class House( SignalListener ):
             wall_colors = [None]*4
 
             
-            floors = [[(12,12,z*15*h),(20,12,z*15*h),(20,20,z*15*h),(12,20,z*15*h)] for z in [0,1,2,3,4,5,6.120]]
+            floors = [[(12,12,z*15*h),(20,12,z*15*h),(20,20,z*15*h),(12,20,z*15*h)] for z in [-0.016,1,2,3,4,5,6.10]]
             floors_colors = [ floor_color]*len(floors)
 
 
@@ -248,14 +286,14 @@ class House( SignalListener ):
 
                 )
 
+                try:
+                    cls.set[k] = (
+                    np.concatenate([ wall_polygons[i] for i in k ]),
+                    np.concatenate([ wall_colors[i] for i in k ]),
 
-                cls.set[k] = (
-                    #np.concatenate( [ inner_wall_polygons ] + [floors ] + [ wall_polygons[i] for i in k ] ),
-                    #np.concatenate( [ inner_wall_colors ] + [floors_colors]+[ wall_colors[i] for i in k ] ),
-                    np.concatenate( [ inner_wall_polygons ] + [ ] + [ ] ),
-                    np.concatenate( [ inner_wall_colors ] + [] ),
-
-                )
+                    )
+                except ValueError:
+                    pass
 
 
 

@@ -21,6 +21,7 @@ class Display( SignalListener ):
     @classmethod
     def on_signal( cls, _type: str, message = None ):
         cls.screen = screen = pygame.display.set_mode( ( 1920, 1080 ), display_mode_flags, 0, 0, vsync )
+        cls.screen.fill( [0x43, 0x4a, 0x55] )
         cls.full_screen_size = np.array( screen.get_size() )
         cls.half_screen_size = cls.full_screen_size // 2
 

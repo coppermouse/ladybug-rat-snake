@@ -31,6 +31,8 @@ class Camera( SignalListener ):
 
     @classmethod
     def on_signal( cls, _type: str, message = None ):
+        from mesh_environment import MeshEnvironment
+        from house import House
         if _type == 'on frame':
             
             if cls.type == 0:
@@ -38,8 +40,12 @@ class Camera( SignalListener ):
             else:
                 if pygame.key.get_pressed()[pygame.K_a]:
                     cls.top_view_angle += 0.016
+                    MeshEnvironment.cache_screen = None
+                    House.cache_outer = None
                 if pygame.key.get_pressed()[pygame.K_d]:
                     cls.top_view_angle -= 0.016
+                    House.cache_outer = None
+                    MeshEnvironment.cache_screen = None
 
 
         if _type == 'on level load':

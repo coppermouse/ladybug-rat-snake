@@ -18,6 +18,7 @@ fog_color = [ 0x43, 0x4a, 0x55 ]
 class MeshEnvironment( SignalListener ):
 
     loaded = False
+    cache_screen = None
 
     def get_listen_to_signal_types() -> list[str]:
         return ( 'on draw', 'on setup', 'on level load' )
@@ -62,7 +63,13 @@ class MeshEnvironment( SignalListener ):
 
         if _type == 'on draw':
             if not cls.loaded: return
-            screen = Display.screen
+
+            if cls.cache_screen:
+                Display.screen.blit( cls.cache_screen, (1920//2-620,1080//2-250))
+                return
+
+            screen = pygame.Surface( (1240,790) )
+            screen.fill( fog_color )
             half_screen_size = Display.half_screen_size
 
             projected_polygons, filtered_colors = projection_polygons( 
@@ -71,7 +78,7 @@ class MeshEnvironment( SignalListener ):
                 Camera.get_scene_position(), 
                 Camera.get_rotation_matrix(),
                 half_screen_size * Camera.factors, 
-                half_screen_size, 
+                (620,250), 
                 near = ( 4, 200 ),
                 edges = [ 1 / c for c in Camera.factors ],
                 fog_color = fog_color,
@@ -79,8 +86,11 @@ class MeshEnvironment( SignalListener ):
                 fog_factor = 0.03 if cls.level == 3 else 0.015,
             )
 
-            screen.fill( fog_color )
             for polygon, color in zip( projected_polygons, filtered_colors ):
                 pygame.draw.polygon( screen, color, polygon )
+
+            cls.cache_screen = screen
+
+            Display.screen.blit( screen, (1920//2-620,1080//2-250))
 
 

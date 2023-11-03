@@ -46,7 +46,7 @@ class InEnvironment( SignalListener ):
 
     @classmethod
     def draw(cls, draw_order_filter = range(-15,16)):
-            sie = sorted_in_environments = sorted( [ c for c in cls.in_environments if c.draw_order in draw_order_filter], key = lambda ie: ie.draw_order )
+            sie = sorted_in_environments = [ c for c in cls.in_environments if c.draw_order in draw_order_filter]
 
             flatten_sorted_in_environment_scene_positions = [ 
                   sp for ie in sie for sp in ( ie.scene_positions 
@@ -57,24 +57,30 @@ class InEnvironment( SignalListener ):
 
             nsie = np.concatenate( flatten_sorted_in_environment_scene_positions )
 
-            projected_vertices, mask, scale = projection_vertices(
+            projected_vertices, mask, scale, colors = projection_vertices(
                 nsie.reshape( len(nsie) // 3, 3 ),
                 Camera.get_scene_position(),
                 Camera.get_rotation_matrix(),
                 ( Display.half_screen_size * Camera.factors ),
                 Display.half_screen_size,
                 near,
+                fog_offset = (0,-34,0)
             )
 
             i = 0
+            draws = list()
             for ie in sorted_in_environments:
-                if not ie.many_scene_positions:
-                    if mask[i]:
-                        ie.environment_draw(
-                            projected_vertices[i], min( scale[i], scale_in_environment_max ) )
+                if mask[i]:
+                        draws.append((ie,
+                            projected_vertices[i], min( scale[i], scale_in_environment_max ) , colors[i], scale[i]  ))
                 else:
-                    ie.environment_draw( projected_vertices[ i : i + len(ie.scene_positions) ] )
+                        assert 0
 
-                i += 1 if not ie.many_scene_positions else len(ie.scene_positions)
+                i += 1
+
+            for d in sorted(draws, key=lambda a:a[-1]):
+                ie = d[0]
+                d = d[1:4]
+                ie.environment_draw( *d )
 
 

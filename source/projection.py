@@ -5,8 +5,16 @@
 
 import numpy as np
 
-def projection_vertices( vertices, offset, rotation_matrix, projection_factor, projection_offset, near ):
+def projection_vertices( vertices, offset, rotation_matrix, projection_factor, projection_offset, near,
+fog_offset = (0,0,0), fog_factor = 0.035
+
+        ):
     v = ( vertices - offset ).dot( rotation_matrix )
+
+    colors = np.clip( np.linalg.norm( -v[:,:2] + fog_offset[:2], axis = 1 ) * fog_factor, 0,1)
+ 
+
+
     projected_vertices = np.flip( np.rot90(
         np.concatenate(( np.array( [ v[:,2] / v[:,1] ]), np.array([ v[:,0] / v[:,1] ]) )))) 
 
@@ -18,7 +26,9 @@ def projection_vertices( vertices, offset, rotation_matrix, projection_factor, p
 
     scale = ( 1 / np.apply_along_axis( np.linalg.norm, 1, vertices - offset ) ) * 2500
 
-    return projected_vertices *  projection_factor + projection_offset, mask, scale
+
+
+    return projected_vertices *  projection_factor + projection_offset, mask, scale, colors
 
 
 def projection_polygons( polygons, colors, offset, rotation_matrix, 
