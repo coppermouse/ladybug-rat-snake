@@ -175,6 +175,9 @@ class House( SignalListener ):
     def draw_outer(cls, outer_wall_visible):
             if not cls.loaded: return
 
+            if pygame.key.get_pressed()[pygame.K_m]:
+                return
+
             if cls.cache_outer:
                 Display.screen.blit( cls.cache_outer, (1920//2 - 155 ,94))
                 return 
