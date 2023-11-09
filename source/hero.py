@@ -64,7 +64,7 @@ class Hero( InEnvironment, SignalListener ):
         return mask, [ int(c*mask_tile_size)-3 for c in p ] 
 
 
-    def environment_draw( self, point, scale ):
+    def environment_draw( self, point, scale, fog ):
         screen = Display.screen
         s = pygame.transform.scale( Resource.imgs[1], (scale,)*2 )
         screen.blit( s, s.get_rect( center = point ) )

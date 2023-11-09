@@ -6,7 +6,7 @@ import pygame
 
 display_mode_flags = pygame.NOFRAME
 vsync = False
-fps = 400
+fps = 600
 
 near = ( 4, 200 )
 

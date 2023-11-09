@@ -64,11 +64,12 @@ class MeshEnvironment( SignalListener ):
         if _type == 'on draw':
             if not cls.loaded: return
 
-            if cls.cache_screen:
+            if Camera.type == 1 and cls.cache_screen:
                 Display.screen.blit( cls.cache_screen, (1920//2-620,1080//2-250))
                 return
 
-            screen = pygame.Surface( (1240,790) )
+
+            screen = pygame.Surface( (1240,790) ) if Camera.type == 1 else Display.screen
             screen.fill( fog_color )
             half_screen_size = Display.half_screen_size
 
@@ -78,7 +79,7 @@ class MeshEnvironment( SignalListener ):
                 Camera.get_scene_position(), 
                 Camera.get_rotation_matrix(),
                 half_screen_size * Camera.factors, 
-                (620,250), 
+                (620,250) if Camera.type == 1 else half_screen_size, 
                 near = ( 4, 200 ),
                 edges = [ 1 / c for c in Camera.factors ],
                 fog_color = fog_color,
@@ -91,6 +92,7 @@ class MeshEnvironment( SignalListener ):
 
             cls.cache_screen = screen
 
-            Display.screen.blit( screen, (1920//2-620,1080//2-250))
+            if Camera.type == 1:
+                Display.screen.blit( screen, (1920//2-620,1080//2-250))
 
 

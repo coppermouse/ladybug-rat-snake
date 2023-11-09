@@ -32,8 +32,8 @@ class SceneSetup( SignalListener ):
            
             if message in (1,2):
                 Hero( (17.5,17.5,1/8) )
-                Laser()
-                LaserShadow() 
+                #Laser()
+                #LaserShadow() 
                 Monster( (10.5,10.5,1/8) ) 
                 Monster( (17.5,17.5,1/8) ) 
 
