@@ -12,6 +12,7 @@ class Line( InEnvironment ):
 
     many_scene_positions = True
     invisible = False
+    draw_order = 10
 
     def __init__( self, color ):
         self.color = color

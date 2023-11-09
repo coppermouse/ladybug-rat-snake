@@ -70,16 +70,25 @@ class InEnvironment( SignalListener ):
             i = 0
             draws = list()
             for ie in sorted_in_environments:
-                if mask[i]:
+                if not ie.many_scene_positions:
+                    if mask[i]:
                         draws.append((ie,
                             projected_vertices[i], min( scale[i], scale_in_environment_max ) , colors[i], scale[i]  ))
                 else:
-                        assert 0
+                        draws.append((
+                            ie,
+                            (1,  projected_vertices[ i : i + len(ie.scene_positions) ] ),
+                            1,
+
+                        ))
 
                 i += 1
 
             for d in sorted(draws, key=lambda a:a[-1]):
                 ie = d[0]
+                if type(d[1]) == tuple:
+                    ie.environment_draw(d[1][1])
+                    continue
                 d = d[1:4]
                 ie.environment_draw( *d )
 
